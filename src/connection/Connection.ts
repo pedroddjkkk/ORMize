@@ -38,7 +38,18 @@ export class Connection {
     return this.sqlconnection;
   }
 
-  protected setCurrentConnection(connection: DbConnection) {
+  protected setCurrentConnection(connection: DbConnection): void {
     this.sqlconnection = connection;
   }
+
+  public isConnected(): boolean {
+    return this.sqlconnection !== undefined;
+  }
+
+  public closeConnection(): void {
+    if (this.sqlconnection) {
+      this.sqlconnection.end();
+    }
+  }
+  
 }
