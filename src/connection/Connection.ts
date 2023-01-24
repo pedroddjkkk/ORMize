@@ -1,15 +1,17 @@
 import * as mysql from "mysql";
 
-export class Connection {
-  private static sqlconnection: mysql.Connection | undefined;
+interface DbConnection extends mysql.Connection {}
 
-  public static connect(
+export class Connection {
+  private sqlconnection: DbConnection | undefined;
+
+  public connect(
     host: string,
     user: string,
     port: number,
     password: string,
     database: string
-  ): mysql.Connection {
+  ): DbConnection {
     if (!this.sqlconnection) {
       this.sqlconnection = mysql.createConnection({
         host: host,
@@ -21,4 +23,15 @@ export class Connection {
     }
     return this.sqlconnection;
   }
+
+  public Connection(
+    host: string,
+    user: string,
+    port: number,
+    password: string,
+    database: string
+  ) {
+    this.connect(host, user, port, password, database);
+  }
+
 }
