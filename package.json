@@ -1,0 +1,19 @@
+{
+  "name": "ormize",
+  "version": "1.0.0",
+  "description": "JSO-SQL (JavaScript Object-Relational Mapping - SQL)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pedroddjkkk/ORM.git"
+  },
+  "author": "Pedro Aparecido Valério",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pedroddjkkk/ORM/issues"
+  },
+  "homepage": "https://github.com/pedroddjkkk/ORM#readme"
+}
