@@ -3,23 +3,31 @@ import * as mysql from "mysql";
 interface DbConnection extends mysql.Connection {}
 
 export class Connection {
-  private sqlconnection: DbConnection | undefined;
+  private sqlconnection?: DbConnection;
 
   public connect(
     host: string,
     user: string,
     port: number,
     database: string
-  ): DbConnection {
-    if (!this.sqlconnection) {
-      this.sqlconnection = mysql.createConnection({
-        host: host,
-        user: user,
-        port: port,
-        database: database,
+  ): Promise<DbConnection> {
+    return new Promise((resolve, reject) => {
+      const connection = mysql.createConnection({
+        host,
+        user,
+        port,
+        database,
       });
-    }
-    return this.sqlconnection;
+
+      connection.connect((err) => {
+        if (err) {
+          reject(err);
+        } else {
+          this.setCurrentConnection(connection);
+          resolve(connection);
+        }
+      });
+    });
   }
 
   public Connection(
