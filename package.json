@@ -2,11 +2,13 @@
   "name": "ormize",
   "version": "1.0.0",
   "description": "JSO-SQL (JavaScript Object-Relational Mapping - SQL)",
-  "main": "index.js",
   "scripts": {
     "build": "webpack",
     "dev": "webpack --watch"
   },
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/pedroddjkkk/ORM.git"

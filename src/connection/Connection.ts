@@ -9,7 +9,6 @@ export class Connection {
     host: string,
     user: string,
     port: number,
-    password: string,
     database: string
   ): DbConnection {
     if (!this.sqlconnection) {
@@ -17,7 +16,6 @@ export class Connection {
         host: host,
         user: user,
         port: port,
-        password: password,
         database: database,
       });
     }
@@ -28,10 +26,9 @@ export class Connection {
     host: string,
     user: string,
     port: number,
-    password: string,
     database: string
   ) {
-    this.connect(host, user, port, password, database);
+    this.connect(host, user, port, database);
   }
 
   public getConnection(): DbConnection | undefined {
@@ -43,7 +40,7 @@ export class Connection {
   }
 
   public isConnected(): boolean {
-    return this.sqlconnection !== undefined;
+    return this.sqlconnection?.state !== "disconnected";
   }
 
   public closeConnection(): void {
