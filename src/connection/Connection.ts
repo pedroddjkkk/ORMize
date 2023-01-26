@@ -39,8 +39,8 @@ export class Connection {
     this.connect(host, user, port, database);
   }
 
-  public getConnection(): DbConnection | undefined {
-    return this.sqlconnection;
+  public getConnection(): DbConnection {
+    return this.sqlconnection as DbConnection;
   }
 
   protected setCurrentConnection(connection: DbConnection): void {
