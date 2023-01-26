@@ -1,6 +1,6 @@
 import * as mysql from "mysql";
 
-interface DbConnection extends mysql.Connection {}
+export interface DbConnection extends mysql.Connection {}
 
 export class Connection {
   private sqlconnection?: DbConnection;
