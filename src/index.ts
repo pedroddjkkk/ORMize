@@ -1,5 +1,4 @@
-import { Model } from "./Model/Model";
+import { Model } from "./Model/Model.js";
 import { Connection } from "./connection/Connection.js";
 
-exports.Model = Model;
-exports.Connection = Connection;
+export { Model, Connection }

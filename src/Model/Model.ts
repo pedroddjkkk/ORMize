@@ -11,7 +11,7 @@ export class Model {
 
   public static setup<T extends Model>(
     this: { new (): T },
-    data: any,
+    fields: any,
     connection: DbConnection
   ): T {
     return new this();
