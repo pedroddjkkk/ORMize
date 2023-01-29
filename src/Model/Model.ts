@@ -13,12 +13,14 @@ export class Model {
     return [new this()];
   }
 
-  public static setup<T extends Model>(
-    this: { new (): T },
-    fields: any,
-    connection: DbConnection
-  ): T {
-    return new this();
+  public static setup(
+    fields: Object,
+    connection: DbConnection,
+    tableName: string,
+  ): void {
+    this.fields = fields;
+    this.connection = connection;
+    this.tableName = tableName;
   }
 
   public static sync(): void {
