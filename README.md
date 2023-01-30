@@ -22,7 +22,22 @@ console.log(connection.isConnected());
 
 ### Criando classes de modelo
 ```javascript
-import { Model, } from 'ormize';
+import { Model, Types } from 'ormize';
+
+class User extends Model {
+  static tableName = "users";
+  static fields = {
+    name: {type: Types.STRING, allowNull: true},
+    age: {type: Types.INTEGER, allowNull: true},
+    email: {type: Types.STRING},
+    password: {type: Types.STRING},
+  };
+  static connection = a.getConnection();
+}
+
+//Sincronizando o modelo com o banco de dados
+User.sync();
+```
 
 ## Contribuições
 Estou sempre procurando por contribuições para o ORMize. Se você encontrar algum bug ou quiser sugerir uma nova funcionalidade, por favor abra uma issue no GitHub. Se você quiser contribuir com o código, por favor envie um pull request.
