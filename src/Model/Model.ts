@@ -1,4 +1,4 @@
-import { DbConnection } from "../connection/Connection.js";
+import { DbConnection } from "../Connection/Connection.js";
 
 interface ModelFields {
   [key: string]: {
@@ -31,23 +31,35 @@ export class Model {
     this.tableName = tableName;
   }
 
-  public static sync(): void {
+  public static async sync(): Promise<Object> {
     try {
-      this.connection.query(
-        `CREATE TABLE IF NOT EXISTS ${this.tableName} (id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY (id))`
+      await this.connection.query(
+        `CREATE TABLE IF NOT EXISTS ${this.tableName} (id INTEGER(6) AUTO_INCREMENT PRIMARY KEY)`
       );
+      const columns: any = await this.connection.query(
+        `SHOW COLUMNS FROM ${this.tableName}`
+      );
+      for (const field in this.fields) {
+        columns[0].forEach((column: any) => {
+          if (column.Field === field) {
+              delete this.fields[field];
+          }
+        });
+      }
       for (const field in this.fields) {
         const fieldConfig = this.fields[field];
         const type = fieldConfig.type;
         const autoIncrement = fieldConfig.autoIncrement ? "AUTO_INCREMENT" : "";
         const primaryKey = fieldConfig.primaryKey ? "PRIMARY KEY" : "";
         const allowNull = fieldConfig.allowNull ? "NULL" : "NOT NULL";
-        this.connection.query(
-          `ALTER TABLE ${this.tableName} ADD COLUMN IF NOT EXISTS ${field} ${type} ${autoIncrement} ${primaryKey} ${allowNull}`
+        await this.connection.query(
+          `ALTER TABLE ${this.tableName} ADD COLUMN ${field} ${type} ${autoIncrement} ${primaryKey} ${allowNull}`
         );
       }
+      return { message: "Sincronização realizada com sucesso", status: 200 };
     } catch (error) {
       console.log("Erro na sincronização: " + error);
+      return { message: "Erro na sincronização", status: 500 };
     }
   }
 }

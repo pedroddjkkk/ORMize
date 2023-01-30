@@ -1,42 +1,30 @@
-import * as mysql from "mysql";
+import * as mysql from "mysql2/promise";
 
-export interface DbConnection extends mysql.Connection {}
+export interface DbConnection extends mysql.Pool {}
+
+export interface ConnectionProps {
+  host: string;
+  user: string;
+  port: number;
+  database: string;
+}
 
 export class Connection {
   private sqlconnection?: DbConnection;
 
-  public connect(
-    host: string,
-    user: string,
-    port: number,
-    database: string
-  ): Promise<DbConnection> {
-    return new Promise((resolve, reject) => {
-      const connection = mysql.createConnection({
-        host,
-        user,
-        port,
-        database,
-      });
-
-      connection.connect((err) => {
-        if (err) {
-          reject(err);
-        } else {
-          this.setCurrentConnection(connection);
-          resolve(connection);
-        }
-      });
+  public connect({host, user, port, database} : ConnectionProps): DbConnection {
+    const connection = mysql.createPool({
+      host,
+      user,
+      port,
+      database,
     });
+    this.setCurrentConnection(connection.pool.promise());
+    return connection.pool.promise();
   }
 
-  public Connection(
-    host: string,
-    user: string,
-    port: number,
-    database: string
-  ) {
-    this.connect(host, user, port, database);
+  constructor({ host, user, port, database }: ConnectionProps) {
+    this.connect({host, user, port, database});
   }
 
   public getConnection(): DbConnection {
@@ -47,8 +35,9 @@ export class Connection {
     this.sqlconnection = connection;
   }
 
-  public isConnected(): boolean {
-    return this.sqlconnection?.state !== "disconnected";
+  public async isConnected(): Promise<boolean> {
+    const test = await this.sqlconnection?.query("SELECT 1");
+    return test ? true : false;
   }
 
   public closeConnection(): void {
@@ -56,5 +45,4 @@ export class Connection {
       this.sqlconnection.end();
     }
   }
-  
 }

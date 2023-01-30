@@ -22,13 +22,12 @@
   },
   "homepage": "https://github.com/pedroddjkkk/ORM#readme",
   "devDependencies": {
-    "@types/mysql": "^2.15.21",
     "ts-loader": "^9.4.2",
     "typescript": "^4.9.4",
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.1"
   },
   "dependencies": {
-    "mysql": "^2.18.1"
+    "mysql2": "^3.1.0"
   }
 }
