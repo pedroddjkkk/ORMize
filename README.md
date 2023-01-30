@@ -16,15 +16,14 @@ Para utilizar o ORMize, você precisa configurar a conexão com o banco de dados
 ```javascript
 import { Connection } from 'ormize';
 
-const connection = new Connection();
-
-async function test() {
-  await connection.connect("127.0.0.1", "root", 3306, "database");
-  console.log(connection.isConnected());
-}
-
-test();
+const connection = new Connection({host: "localhost", user: "root", port: 3306, database: "orm"});
+console.log(connection.isConnected());
 ```
+
+### Criando classes de modelo
+```javascript
+import { Model, } from 'ormize';
+
 ## Contribuições
 Estou sempre procurando por contribuições para o ORMize. Se você encontrar algum bug ou quiser sugerir uma nova funcionalidade, por favor abra uma issue no GitHub. Se você quiser contribuir com o código, por favor envie um pull request.
 
