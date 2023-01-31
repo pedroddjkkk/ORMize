@@ -16,21 +16,34 @@ export class Model {
     static async sync() {
         try {
             await this.connection.query(`CREATE TABLE IF NOT EXISTS ${this.tableName} (id INTEGER(6) AUTO_INCREMENT PRIMARY KEY)`);
-            const columns = await this.connection.query(`SHOW COLUMNS FROM ${this.tableName}`);
-            for (const field in this.fields) {
-                columns[0].forEach((column) => {
-                    if (column.Field === field) {
-                        delete this.fields[field];
-                    }
-                });
-            }
+            let columns = await this.connection.query(`SHOW COLUMNS FROM ${this.tableName}`);
+            let rcolumns = columns[0];
             for (const field in this.fields) {
                 const fieldConfig = this.fields[field];
-                const type = fieldConfig.type;
-                const autoIncrement = fieldConfig.autoIncrement ? "AUTO_INCREMENT" : "";
-                const primaryKey = fieldConfig.primaryKey ? "PRIMARY KEY" : "";
-                const allowNull = fieldConfig.allowNull ? "NULL" : "NOT NULL";
-                await this.connection.query(`ALTER TABLE ${this.tableName} ADD COLUMN ${field} ${type} ${autoIncrement} ${primaryKey} ${allowNull}`);
+                let exists = false;
+                for (let i = 0; i < rcolumns.length; i++) {
+                    const column = rcolumns[i];
+                    if (!(column.Field in this.fields)) {
+                        await this.connection.query(`ALTER TABLE ${this.tableName} DROP COLUMN ${column.Field}`);
+                    }
+                    if (column.Field === field) {
+                        exists = true;
+                        if (column.Type !== fieldConfig.type ||
+                            column.Null !== (fieldConfig.allowNull ? "YES" : "NO")) {
+                            await this.connection.query(`ALTER TABLE ${this.tableName} MODIFY COLUMN ${field} ${fieldConfig.type} ${fieldConfig.allowNull ? "NULL" : "NOT NULL"}`);
+                        }
+                        if (column.Extra !== (fieldConfig.autoIncrement ? "auto_increment" : "")) {
+                            await this.connection.query(`ALTER TABLE ${this.tableName} MODIFY COLUMN ${field} ${fieldConfig.type} ${fieldConfig.allowNull ? "NULL" : "NOT NULL"} ${fieldConfig.autoIncrement ? "AUTO_INCREMENT" : ""}`);
+                        }
+                        break;
+                    }
+                }
+                if (!exists) {
+                    const autoIncrement = fieldConfig.autoIncrement ? "AUTO_INCREMENT" : "";
+                    const primaryKey = fieldConfig.primaryKey ? "PRIMARY KEY" : "";
+                    const allowNull = fieldConfig.allowNull ? "NULL" : "NOT NULL";
+                    await this.connection.query(`ALTER TABLE ${this.tableName} ADD COLUMN ${field} ${fieldConfig.type} ${autoIncrement} ${primaryKey} ${allowNull}`);
+                }
             }
             return { message: "Sincronização realizada com sucesso", status: 200 };
         }

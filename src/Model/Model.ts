@@ -12,11 +12,11 @@ export interface ModelFields {
 
 export interface ColumnsFields {
   Default: Object;
-  Extra: String;
-  Field: String;
-  Key: String;
-  Null: String;
-  Type: String;
+  Extra: string;
+  Field: string;
+  Key: string;
+  Null: string;
+  Type: string;
 }
 export class Model {
   protected static connection: DbConnection;
@@ -55,6 +55,11 @@ export class Model {
         let exists = false;
         for (let i = 0; i < rcolumns.length; i++) {
           const column = rcolumns[i];
+          if (!(column.Field in this.fields)) {
+            await this.connection.query(
+              `ALTER TABLE ${this.tableName} DROP COLUMN ${column.Field}`
+            );
+          }
           if (column.Field === field) {
             exists = true;
             if (
