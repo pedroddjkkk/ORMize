@@ -1,12 +1,22 @@
+import { RowDataPacket } from "mysql2";
 import { DbConnection } from "../Connection/Connection.js";
 
-interface ModelFields {
+export interface ModelFields {
   [key: string]: {
     type: string;
     autoIncrement?: boolean;
     primaryKey?: boolean;
     allowNull?: boolean;
   };
+}
+
+export interface ColumnsFields {
+  Default: Object;
+  Extra: String;
+  Field: String;
+  Key: String;
+  Null: String;
+  Type: String;
 }
 export class Model {
   protected static connection: DbConnection;
@@ -36,13 +46,13 @@ export class Model {
       await this.connection.query(
         `CREATE TABLE IF NOT EXISTS ${this.tableName} (id INTEGER(6) AUTO_INCREMENT PRIMARY KEY)`
       );
-      const columns: any = await this.connection.query(
+      const columns: Array<Array<ColumnsFields>> | RowDataPacket = await this.connection.query(
         `SHOW COLUMNS FROM ${this.tableName}`
       );
       for (const field in this.fields) {
-        columns[0].forEach((column: any) => {
+        columns[0].forEach((column) => {
           if (column.Field === field) {
-              delete this.fields[field];
+            delete this.fields[field];
           }
         });
       }
