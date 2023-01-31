@@ -27,6 +27,7 @@ import { Model, Types } from 'ormize';
 class User extends Model {
   static tableName = "users";
   static fields = {
+    id: {type: Types.INTEGER, primaryKey: true, autoIncrement: true},
     name: {type: Types.STRING, allowNull: true},
     age: {type: Types.INTEGER, allowNull: true},
     email: {type: Types.STRING},
