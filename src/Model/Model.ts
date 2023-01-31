@@ -49,12 +49,12 @@ export class Model {
       let columns: Array<Array<ColumnsFields>> | RowDataPacket = await this.connection.query(
         `SHOW COLUMNS FROM ${this.tableName}`
       );
-      columns = columns[0];
+      let rcolumns: Array<ColumnsFields> = columns[0];
       for (const field in this.fields) {
         const fieldConfig = this.fields[field];
         let exists = false;
-        for (let i = 0; i < columns.length; i++) {
-          const column = columns[i];
+        for (let i = 0; i < rcolumns.length; i++) {
+          const column = rcolumns[i];
           if (column.Field === field) {
             exists = true;
             if (
