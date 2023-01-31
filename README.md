@@ -32,7 +32,7 @@ class User extends Model {
     email: {type: Types.STRING},
     password: {type: Types.STRING},
   };
-  static connection = a.getConnection();
+  static connection = connection.getConnection();
 }
 
 //Sincronizando o modelo com o banco de dados
