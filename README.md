@@ -1,18 +1,18 @@
 # ORMize
-ORMize é um ORM (Object-Relational Mapping) desenvolvido em TypeScript, mas também pode ser utilizado em JavaScript. Ele tem como objetivo facilitar a interação entre aplicações e bancos de dados, permitindo que os desenvolvedores possam trabalhar com os dados utilizando objetos em vez de escrever código SQL.
+ORMize is a TypeScript-developed Object-Relational Mapping (ORM), but can also be used in JavaScript. Its goal is to ease the interaction between applications and databases, allowing developers to work with data using objects instead of writing SQL code.
 
-Atualmente, ORMize suporta apenas o banco de dados MySQL, mas planejo adicionar suporte a mais bancos de dados no futuro.
+Currently, ORMize only supports the MySQL database, but I plan to add support for more databases in the future.
 
-## Instalação
-Para instalar o ORMize, você pode utilizar o npm:
+## Installation
+To install ORMize, you can use npm:
 ```
 npm install ormize
 ```
 
-## Como usar
-Para utilizar o ORMize, você precisa configurar a conexão com o banco de dados e criar suas classes de modelo.
+## How to use
+To use ORMize, you need to set up the connection to the database and create your model classes.
 
-### Configurando a conexão
+### Setting up the connection
 ```javascript
 import { Connection } from 'ormize';
 
@@ -20,7 +20,7 @@ const connection = new Connection({host: "localhost", user: "root", port: 3306, 
 console.log(connection.isConnected());
 ```
 
-### Criando classes de modelo
+### Creating model classes
 ```javascript
 import { Model, Types } from 'ormize';
 
@@ -36,12 +36,12 @@ class User extends Model {
   static connection = connection.getConnection();
 }
 
-//Sincronizando o modelo com o banco de dados
+//Synchronizing the model with the database
 User.sync();
 ```
 
-## Contribuições
-Estou sempre procurando por contribuições para o ORMize. Se você encontrar algum bug ou quiser sugerir uma nova funcionalidade, por favor abra uma issue no GitHub. Se você quiser contribuir com o código, por favor envie um pull request.
+## Contributions
+I am always looking for contributions to ORMize. If you find a bug or want to suggest a new feature, please open an issue on GitHub. If you want to contribute to the code, please send a pull request.
 
 ## Licença
-ORMize está licenciado sob a licença MIT. Pode encontrar a liscença em [LICENSE](LICENSE)
+ORMize is licensed under the MIT license. You can find the license in [LICENSE](LICENSE)
