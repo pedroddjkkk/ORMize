@@ -46,9 +46,8 @@ export class Model {
       await this.connection.query(
         `CREATE TABLE IF NOT EXISTS ${this.tableName} (id INTEGER(6) AUTO_INCREMENT PRIMARY KEY)`
       );
-      let columns: Array<Array<ColumnsFields>> | RowDataPacket = await this.connection.query(
-        `SHOW COLUMNS FROM ${this.tableName}`
-      );
+      let columns: Array<Array<ColumnsFields>> | RowDataPacket =
+        await this.connection.query(`SHOW COLUMNS FROM ${this.tableName}`);
       let rcolumns: Array<ColumnsFields> = columns[0];
       for (const field in this.fields) {
         const fieldConfig = this.fields[field];
@@ -67,23 +66,30 @@ export class Model {
               column.Null !== (fieldConfig.allowNull ? "YES" : "NO")
             ) {
               await this.connection.query(
-                `ALTER TABLE ${this.tableName} MODIFY COLUMN ${field} ${fieldConfig.type} ${
-                  fieldConfig.allowNull ? "NULL" : "NOT NULL"
-                }`
+                `ALTER TABLE ${this.tableName} MODIFY COLUMN ${field} ${
+                  fieldConfig.type
+                } ${fieldConfig.allowNull ? "NULL" : "NOT NULL"}`
               );
             }
-            if (column.Extra !== (fieldConfig.autoIncrement ? "auto_increment" : "")) {
+            if (
+              column.Extra !==
+              (fieldConfig.autoIncrement ? "auto_increment" : "")
+            ) {
               await this.connection.query(
-                `ALTER TABLE ${this.tableName} MODIFY COLUMN ${field} ${fieldConfig.type} ${
-                  fieldConfig.allowNull ? "NULL" : "NOT NULL"
-                } ${fieldConfig.autoIncrement ? "AUTO_INCREMENT" : ""}`
+                `ALTER TABLE ${this.tableName} MODIFY COLUMN ${field} ${
+                  fieldConfig.type
+                } ${fieldConfig.allowNull ? "NULL" : "NOT NULL"} ${
+                  fieldConfig.autoIncrement ? "AUTO_INCREMENT" : ""
+                }`
               );
             }
             break;
           }
         }
         if (!exists) {
-          const autoIncrement = fieldConfig.autoIncrement ? "AUTO_INCREMENT" : "";
+          const autoIncrement = fieldConfig.autoIncrement
+            ? "AUTO_INCREMENT"
+            : "";
           const primaryKey = fieldConfig.primaryKey ? "PRIMARY KEY" : "";
           const allowNull = fieldConfig.allowNull ? "NULL" : "NOT NULL";
           await this.connection.query(

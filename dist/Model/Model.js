@@ -32,14 +32,17 @@ export class Model {
                             column.Null !== (fieldConfig.allowNull ? "YES" : "NO")) {
                             await this.connection.query(`ALTER TABLE ${this.tableName} MODIFY COLUMN ${field} ${fieldConfig.type} ${fieldConfig.allowNull ? "NULL" : "NOT NULL"}`);
                         }
-                        if (column.Extra !== (fieldConfig.autoIncrement ? "auto_increment" : "")) {
+                        if (column.Extra !==
+                            (fieldConfig.autoIncrement ? "auto_increment" : "")) {
                             await this.connection.query(`ALTER TABLE ${this.tableName} MODIFY COLUMN ${field} ${fieldConfig.type} ${fieldConfig.allowNull ? "NULL" : "NOT NULL"} ${fieldConfig.autoIncrement ? "AUTO_INCREMENT" : ""}`);
                         }
                         break;
                     }
                 }
                 if (!exists) {
-                    const autoIncrement = fieldConfig.autoIncrement ? "AUTO_INCREMENT" : "";
+                    const autoIncrement = fieldConfig.autoIncrement
+                        ? "AUTO_INCREMENT"
+                        : "";
                     const primaryKey = fieldConfig.primaryKey ? "PRIMARY KEY" : "";
                     const allowNull = fieldConfig.allowNull ? "NULL" : "NOT NULL";
                     await this.connection.query(`ALTER TABLE ${this.tableName} ADD COLUMN ${field} ${fieldConfig.type} ${autoIncrement} ${primaryKey} ${allowNull}`);
