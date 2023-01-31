@@ -1,0 +1,33 @@
+import * as mysql from "mysql2/promise";
+export class Connection {
+    sqlconnection;
+    connect({ host, user, port, database }) {
+        const connection = mysql.createPool({
+            host,
+            user,
+            port,
+            database,
+        });
+        this.setCurrentConnection(connection.pool.promise());
+        return connection.pool.promise();
+    }
+    constructor({ host, user, port, database }) {
+        this.connect({ host, user, port, database });
+    }
+    getConnection() {
+        return this.sqlconnection;
+    }
+    setCurrentConnection(connection) {
+        this.sqlconnection = connection;
+    }
+    async isConnected() {
+        const test = await this.sqlconnection?.query("SELECT 1");
+        return test ? true : false;
+    }
+    closeConnection() {
+        if (this.sqlconnection) {
+            this.sqlconnection.end();
+        }
+    }
+}
+//# sourceMappingURL=Connection.js.map
