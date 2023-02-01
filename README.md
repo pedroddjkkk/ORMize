@@ -41,7 +41,7 @@ User.sync();
 ```
 
 ## Contributions
-I am always looking for contributions to ORMize. If you find a bug or want to suggest a new feature, please open an issue on GitHub. If you want to contribute to the code, please send a pull request.
+I am always looking for contributions to ORMize. If you find a bug or want to suggest a new feature, please open an issue on GitHub. If you want to contribute to the code, please send a pull request. Please, check the [CONTRIBUTING](CONTRIBUTING.md) file for more information.
 
 ## Licença
 ORMize is licensed under the MIT license. You can find the license in [LICENSE](LICENSE)
