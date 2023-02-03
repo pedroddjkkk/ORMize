@@ -1,5 +1,5 @@
 import { RowDataPacket } from "mysql2";
-import { DbConnection } from "../Connection/Connection.js";
+import { Connection, DbConnection } from "../Connection/Connection.js";
 
 export interface ModelFields {
   [key: string]: {
@@ -18,6 +18,15 @@ export interface ColumnsFields {
   Null: string;
   Type: string;
 }
+
+export interface SelectArguments {
+  where?: Object;
+  limit?: number;
+  offset?: number;
+  order?: Object;
+  group?: Object;
+  having?: Object;
+}
 export class Model {
   protected static connection: DbConnection;
   protected static fields: ModelFields;
@@ -27,8 +36,10 @@ export class Model {
     return new this();
   }
 
-  public static getAll<T extends Model>(this: { new (): T }): T[] {
-    return [new this()];
+  public static getAll({}): Promise<Array<Model>> {
+    return new Promise((resolve, reject) => {
+
+    });
   }
 
   public static setup(
