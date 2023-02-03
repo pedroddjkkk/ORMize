@@ -32,7 +32,7 @@ export class Model {
     return new this();
   }
 
-  public static getAll(
+  public static find(
     selectArguments: SelectArguments = {}
   ): Promise<
     [

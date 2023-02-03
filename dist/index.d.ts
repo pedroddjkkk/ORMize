@@ -61,7 +61,7 @@ declare module "ormize" {
      * Recupera todos os registros da tabela
      * @returns Array de instâncias da classe
      */
-    public static getAll(
+    public static find(
       selectArguments: SelectArguments = {}
     ): Promise<
       [

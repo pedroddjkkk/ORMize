@@ -5,7 +5,7 @@ export class Model {
     static get(id) {
         return new this();
     }
-    static getAll(selectArguments = {}) {
+    static find(selectArguments = {}) {
         return new Promise(async (resolve, reject) => {
             const { where = {}, limit } = selectArguments;
             let whereClause = "";

@@ -40,6 +40,27 @@ class User extends Model {
 User.sync();
 ```
 
+### Getting data
+```javascript
+//Getting all users
+const users = await User.find();
+
+//Getting a user by id
+const user = await User.find({
+  where: {
+    id: 1
+  }
+});
+
+//Getting a user by email limiting by 1
+const user = await User.find({
+  where: {
+    email: "Jhon@jhon.com"
+  },
+  limit: 1
+});
+```
+
 ## Contributions
 I am always looking for contributions to ORMize. If you find a bug or want to suggest a new feature, please open an issue on GitHub. If you want to contribute to the code, please send a pull request. Please, check the [CONTRIBUTING](CONTRIBUTING.MD) file for more information.
 
