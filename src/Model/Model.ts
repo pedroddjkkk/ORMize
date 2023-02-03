@@ -1,4 +1,4 @@
-import { RowDataPacket } from "mysql2";
+import { FieldPacket, OkPacket, ResultSetHeader, RowDataPacket } from "mysql2";
 import { Connection, DbConnection } from "../Connection/Connection.js";
 
 export interface ModelFields {
@@ -22,10 +22,6 @@ export interface ColumnsFields {
 export interface SelectArguments {
   where?: Object;
   limit?: number;
-  offset?: number;
-  order?: Object;
-  group?: Object;
-  having?: Object;
 }
 export class Model {
   protected static connection: DbConnection;
@@ -36,9 +32,14 @@ export class Model {
     return new this();
   }
 
-  public static getAll({}): Promise<Array<Model>> {
-    return new Promise((resolve, reject) => {
-
+    public static getAll({where, limit}: SelectArguments): Promise<[RowDataPacket[] | RowDataPacket[][] | OkPacket | OkPacket[] | ResultSetHeader, FieldPacket[]]> {
+    return new Promise( async (resolve, reject) => {
+      const whereClause = where ? "WHERE " + where : "";
+      const limitClause = limit ? "LIMIT " + limit : "";
+      const result = await this.connection.query(
+        `SELECT * FROM ${this.tableName} ${whereClause} ${limitClause}`
+      );
+      resolve(result);
     });
   }
 
