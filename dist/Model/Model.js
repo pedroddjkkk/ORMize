@@ -5,8 +5,21 @@ export class Model {
     static get(id) {
         return new this();
     }
-    static getAll() {
-        return [new this()];
+    static getAll(selectArguments = {}) {
+        return new Promise(async (resolve, reject) => {
+            const { where = {}, limit } = selectArguments;
+            let whereClause = "";
+            if (Object.keys(where).length > 0) {
+                whereClause =
+                    "WHERE " +
+                        Object.entries(where)
+                            .map(([key, value]) => `${key} = '${value}'`)
+                            .join(" AND ");
+            }
+            const limitClause = limit ? "LIMIT " + limit : "";
+            const result = await this.connection.query(`SELECT * FROM ${this.tableName} ${whereClause} ${limitClause}`);
+            resolve(result);
+        });
     }
     static setup(fields, connection, tableName) {
         this.fields = fields;

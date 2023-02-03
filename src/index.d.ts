@@ -1,4 +1,4 @@
-declare module 'ormize' {
+declare module "ormize" {
   import * as mysql from "mysql2/promise";
 
   export interface DbConnection extends mysql.Pool {}
@@ -13,7 +13,12 @@ declare module 'ormize' {
   export class Connection {
     private sqlconnection?: DbConnection;
 
-    public connect({host, user, port, database} : ConnectionProps): DbConnection;
+    public connect({
+      host,
+      user,
+      port,
+      database,
+    }: ConnectionProps): DbConnection;
 
     constructor({ host, user, port, database }: ConnectionProps);
 
@@ -35,24 +40,42 @@ declare module 'ormize' {
     };
   }
   
+  export interface SelectArguments {
+    where?: object;
+    limit?: number;
+  }
+
   export class Model {
     protected static connection: DbConnection;
     protected static fields: ModelFields;
     protected static tableName: string;
-  
+
     /**
      * Recupera um registro a partir de seu id
      * @param id Id do registro
      * @returns Instância da classe com o registro
      */
     public static get<T extends Model>(this: { new (): T }, id: string): T;
-  
+
     /**
      * Recupera todos os registros da tabela
      * @returns Array de instâncias da classe
      */
-    public static getAll<T extends Model>(this: { new (): T }): T[];
-  
+    public static getAll(
+      selectArguments: SelectArguments = {}
+    ): Promise<
+      [
+        (
+          | RowDataPacket[]
+          | RowDataPacket[][]
+          | OkPacket
+          | OkPacket[]
+          | ResultSetHeader
+        ),
+        FieldPacket[]
+      ]
+    >;
+
     /**
      * Configura a conexão com o banco de dados, os campos da tabela e o nome da tabela
      * @param fields Campos da tabela
@@ -64,7 +87,7 @@ declare module 'ormize' {
       connection: DbConnection,
       tableName: string
     ): void;
-  
+
     /**
      * Sincroniza as alterações realizadas no model com o banco de dados
      * @returns Resultado da operação de sincronização

@@ -20,7 +20,7 @@ export interface ColumnsFields {
 }
 
 export interface SelectArguments {
-  where?: Object;
+  where?: object;
   limit?: number;
 }
 export class Model {
@@ -32,9 +32,30 @@ export class Model {
     return new this();
   }
 
-    public static getAll({where, limit}: SelectArguments): Promise<[RowDataPacket[] | RowDataPacket[][] | OkPacket | OkPacket[] | ResultSetHeader, FieldPacket[]]> {
-    return new Promise( async (resolve, reject) => {
-      const whereClause = where ? "WHERE " + where : "";
+  public static getAll(
+    selectArguments: SelectArguments = {}
+  ): Promise<
+    [
+      (
+        | RowDataPacket[]
+        | RowDataPacket[][]
+        | OkPacket
+        | OkPacket[]
+        | ResultSetHeader
+      ),
+      FieldPacket[]
+    ]
+  > {
+    return new Promise(async (resolve, reject) => {
+      const { where = {}, limit } = selectArguments;
+      let whereClause = "";
+      if (Object.keys(where).length > 0) {
+        whereClause =
+          "WHERE " +
+          Object.entries(where)
+            .map(([key, value]) => `${key} = '${value}'`)
+            .join(" AND ");
+      }
       const limitClause = limit ? "LIMIT " + limit : "";
       const result = await this.connection.query(
         `SELECT * FROM ${this.tableName} ${whereClause} ${limitClause}`
