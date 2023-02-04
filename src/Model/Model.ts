@@ -68,8 +68,8 @@ export class Model {
     try {
       const fields = Object.keys(Model.fields);
       const values = fields.map((field) => this[field]);
-      const result = await this.connection.query(
-        `INSERT INTO ${this.tableName} (${fields.join(",")}) VALUES (${values
+      const result = await Model.connection.query(
+        `INSERT INTO ${Model.tableName} (${fields.join(",")}) VALUES (${values
           .map((value) => `'${value}'`)
           .join(",")})`
       );
