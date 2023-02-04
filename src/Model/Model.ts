@@ -64,6 +64,23 @@ export class Model {
     });
   }
 
+  public async save(): Promise<Object> {
+    try {
+      const fields = Object.keys(Model.fields);
+      const values = fields.map((field) => this[field]);
+      const result = await this.connection.query(
+        `INSERT INTO ${this.tableName} (${fields.join(",")}) VALUES (${values
+          .map((value) => `'${value}'`)
+          .join(",")})`
+      );
+      return { message: "Registro salvo com sucesso", status: 200 };
+    } catch (error) {
+      console.log("Erro ao salvar registro: " + error);
+
+      return { message: "Erro ao salvar registro", status: 500 };
+    }
+  }
+
   public static setup(
     fields: ModelFields,
     connection: DbConnection,
