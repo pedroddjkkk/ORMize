@@ -7,17 +7,19 @@ export interface ConnectionProps {
   user: string;
   port: number;
   database: string;
+  password?: string;
 }
 
 export class Connection {
   private sqlconnection?: DbConnection;
 
-  public connect({host, user, port, database} : ConnectionProps): DbConnection {
+  public connect({host, user, port, database, password} : ConnectionProps): DbConnection {
     const connection = mysql.createPool({
       host,
       user,
       port,
       database,
+      password,
     });
     this.setCurrentConnection(connection.pool.promise());
     return connection.pool.promise();
