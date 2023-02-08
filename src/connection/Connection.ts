@@ -25,8 +25,8 @@ export class Connection {
     return connection.pool.promise();
   }
 
-  constructor({ host, user, port, database }: ConnectionProps) {
-    this.connect({host, user, port, database});
+  constructor({ host, user, port, database, password }: ConnectionProps) {
+    this.connect({host, user, port, database, password});
   }
 
   public getConnection(): DbConnection {
