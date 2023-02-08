@@ -23,15 +23,12 @@ export class Model {
     }
     async save() {
         try {
-            const fields = Object.keys(Model.fields);
-            const values = fields.map((field) => Model.fields[field]);
-            const query = `INSERT INTO ${Model.tableName} (${fields.join(",")}) VALUES (${values
+            const fields = Object.keys(this.constructor.fields);
+            const values = fields.map((field) => this[field]);
+            const query = `INSERT INTO ${this.constructor.tableName} (${fields.join(",")}) VALUES (${values
                 .map((value) => `'${value}'`)
                 .join(",")})`;
-            console.log(query);
-            const result = await Model.connection.query(`INSERT INTO ${Model.tableName} (${fields.join(",")}) VALUES (${values
-                .map((value) => `'${value}'`)
-                .join(",")})`);
+            const result = await this.constructor.connection.query(query);
             return { message: "Registro salvo com sucesso", status: 200 };
         }
         catch (error) {
