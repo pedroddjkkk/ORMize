@@ -21,6 +21,24 @@ export class Model {
             resolve(result);
         });
     }
+    async save() {
+        try {
+            const fields = Object.keys(Model.fields);
+            const values = fields.map((field) => Model.fields[field]);
+            const query = `INSERT INTO ${Model.tableName} (${fields.join(",")}) VALUES (${values
+                .map((value) => `'${value}'`)
+                .join(",")})`;
+            console.log(query);
+            const result = await Model.connection.query(`INSERT INTO ${Model.tableName} (${fields.join(",")}) VALUES (${values
+                .map((value) => `'${value}'`)
+                .join(",")})`);
+            return { message: "Registro salvo com sucesso", status: 200 };
+        }
+        catch (error) {
+            console.log("Erro ao salvar registro: " + error);
+            return { message: "Erro ao salvar registro", status: 500 };
+        }
+    }
     static setup(fields, connection, tableName) {
         this.fields = fields;
         this.connection = connection;
