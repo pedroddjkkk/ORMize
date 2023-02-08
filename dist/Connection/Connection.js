@@ -1,18 +1,19 @@
 import * as mysql from "mysql2/promise";
 export class Connection {
     sqlconnection;
-    connect({ host, user, port, database }) {
+    connect({ host, user, port, database, password }) {
         const connection = mysql.createPool({
             host,
             user,
             port,
             database,
+            password,
         });
         this.setCurrentConnection(connection.pool.promise());
         return connection.pool.promise();
     }
-    constructor({ host, user, port, database }) {
-        this.connect({ host, user, port, database });
+    constructor({ host, user, port, database, password }) {
+        this.connect({ host, user, port, database, password });
     }
     getConnection() {
         return this.sqlconnection;
