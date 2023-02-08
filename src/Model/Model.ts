@@ -67,7 +67,7 @@ export class Model {
   public async save(): Promise<Object> {
     try {
       const fields = Object.keys(Model.fields);
-      const values = fields.map((field) => this[field]);
+      const values = fields.map((field) => Model.fields[field]);
       const result = await Model.connection.query(
         `INSERT INTO ${Model.tableName} (${fields.join(",")}) VALUES (${values
           .map((value) => `'${value}'`)
