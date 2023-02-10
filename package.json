@@ -1,6 +1,6 @@
 {
   "name": "ormize",
-  "version": "1.2.1-alpha.1",
+  "version": "1.2.1-beta.2",
   "description": "JSO-SQL (JavaScript Object-Relational Mapping - SQL)",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
